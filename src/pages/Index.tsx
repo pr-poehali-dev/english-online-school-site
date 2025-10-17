@@ -2,9 +2,20 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Icon from "@/components/ui/icon";
 import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const Index = () => {
   const [activeFeature, setActiveFeature] = useState(0);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
 
   const features = [
     {
@@ -119,6 +130,7 @@ const Index = () => {
               <Button 
                 size="lg" 
                 className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-lg px-12 py-6 rounded-2xl shadow-2xl hover:shadow-purple-300 transition-all hover:scale-105 font-heading font-bold"
+                onClick={() => setIsDialogOpen(true)}
               >
                 Начать обучение
                 <Icon name="ArrowRight" className="ml-2" size={20} />
@@ -327,6 +339,70 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-heading text-2xl bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              Начни учить английский уже сегодня!
+            </DialogTitle>
+            <DialogDescription>
+              Заполни форму и получи первый бесплатный урок
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Имя</Label>
+              <Input 
+                id="name" 
+                placeholder="Как тебя зовут?" 
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input 
+                id="email" 
+                type="email" 
+                placeholder="твой@email.ru" 
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="phone">Телефон</Label>
+              <Input 
+                id="phone" 
+                type="tel" 
+                placeholder="+7 (999) 123-45-67" 
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              />
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <Button 
+              variant="outline" 
+              className="flex-1"
+              onClick={() => setIsDialogOpen(false)}
+            >
+              Отмена
+            </Button>
+            <Button 
+              className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold"
+              onClick={() => {
+                console.log('Регистрация:', formData);
+                setIsDialogOpen(false);
+                setFormData({ name: "", email: "", phone: "" });
+              }}
+            >
+              <Icon name="Rocket" className="mr-2" size={18} />
+              Поехали!
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
